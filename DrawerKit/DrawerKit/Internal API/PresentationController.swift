@@ -3,6 +3,7 @@ import UIKit
 final class PresentationController: UIPresentationController {
     let configuration: DrawerConfiguration // intentionally internal and immutable
     let inDebugMode: Bool
+    let forwardingView: ForwardingView?
     let handleView: UIView?
 
     let presentingDrawerAnimationActions: DrawerAnimationActions
@@ -53,6 +54,7 @@ final class PresentationController: UIPresentationController {
         self.configuration = configuration
         self.inDebugMode = inDebugMode
         self.handleView = (configuration.handleViewConfiguration != nil ? UIView() : nil)
+        self.forwardingView = (configuration.shouldForwardTouchesToPresenterVC ? ForwardingView() : nil)
         self.presentingDrawerAnimationActions = presentingDrawerAnimationActions
         self.presentedDrawerAnimationActions = presentedDrawerAnimationActions
         self.targetDrawerState = configuration.supportsPartialExpansion ? .partiallyExpanded : .fullyExpanded
@@ -100,6 +102,7 @@ extension PresentationController {
         setupDrawerDragRecogniser()
         setupDebugHeightMarks()
         setupHandleView()
+        setupForwardingView()
         setupDrawerBorder()
         setupDrawerShadow()
         addCornerRadiusAnimationEnding(at: .partiallyExpanded)
@@ -108,8 +111,10 @@ extension PresentationController {
     }
 
     override func presentationTransitionDidEnd(_ completed: Bool) {
-        enableDrawerFullExpansionTapRecogniser(enabled: true)
-        enableDrawerDismissalTapRecogniser(enabled: true)
+        if !configuration.shouldForwardTouchesToPresenterVC {
+            enableDrawerFullExpansionTapRecogniser(enabled: true)
+            enableDrawerDismissalTapRecogniser(enabled: true)
+        }
     }
 
     override func dismissalTransitionWillBegin() {

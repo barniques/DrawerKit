@@ -127,6 +127,16 @@ extension PresentationController {
 }
 
 extension PresentationController {
+    
+    func setupForwardingView() {
+        guard let forwardingView = self.forwardingView else { return }
+        forwardingView.passthroughViews = [self.presentingViewController.view]
+        self.containerView?.insertSubview(forwardingView, at: 0)
+    }
+    
+}
+
+extension PresentationController {
     func setupDebugHeightMarks() {
         guard inDebugMode && (upperMarkGap > 0 || lowerMarkGap > 0),
             let containerView = containerView else { return }

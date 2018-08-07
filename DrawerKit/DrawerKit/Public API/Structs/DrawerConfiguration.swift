@@ -43,6 +43,8 @@ public struct DrawerConfiguration {
         /// maximum radius, and shrink only as the drawer moves into the frame
         /// of the status bar towards the top screen edge.
         case alwaysShowBelowStatusBar
+        
+        case always
     }
 
     /// The total duration, in seconds, for the drawer to transition from its
@@ -156,6 +158,8 @@ public struct DrawerConfiguration {
     /// The configuration options for the drawer's shadow, should it be shown. Set this
     /// property to `nil` so as not to have a drawer shadow. The default value is `nil`.
     public var drawerShadowConfiguration: DrawerShadowConfiguration?
+    
+    public var shouldForwardTouchesToPresenterVC: Bool
 
     public init(totalDurationInSeconds: TimeInterval = 0.4,
                 durationIsProportionalToDistanceTraveled: Bool = false,
@@ -175,7 +179,8 @@ public struct DrawerConfiguration {
                 cornerAnimationOption: CornerAnimationOption = .maximumAtPartialY,
                 handleViewConfiguration: HandleViewConfiguration? = HandleViewConfiguration(),
                 drawerBorderConfiguration: DrawerBorderConfiguration? = nil,
-                drawerShadowConfiguration: DrawerShadowConfiguration? = nil) {
+                drawerShadowConfiguration: DrawerShadowConfiguration? = nil,
+                shouldForwardTouchesToPresenterVC: Bool = false) {
         self.totalDurationInSeconds = (totalDurationInSeconds > 0 ? totalDurationInSeconds : 0.4)
         self.durationIsProportionalToDistanceTraveled = durationIsProportionalToDistanceTraveled
         self.timingCurveProvider = timingCurveProvider
@@ -202,6 +207,7 @@ public struct DrawerConfiguration {
         self.handleViewConfiguration = handleViewConfiguration
         self.drawerBorderConfiguration = drawerBorderConfiguration
         self.drawerShadowConfiguration = drawerShadowConfiguration
+        self.shouldForwardTouchesToPresenterVC = shouldForwardTouchesToPresenterVC
     }
 }
 
@@ -225,5 +231,6 @@ extension DrawerConfiguration: Equatable {
             && lhs.handleViewConfiguration == rhs.handleViewConfiguration
             && lhs.drawerBorderConfiguration == rhs.drawerBorderConfiguration
             && lhs.drawerShadowConfiguration == rhs.drawerShadowConfiguration
+            && lhs.shouldForwardTouchesToPresenterVC == rhs.shouldForwardTouchesToPresenterVC
     }
 }

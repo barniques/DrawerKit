@@ -25,7 +25,7 @@ private extension PresenterViewController {
         configuration.durationIsProportionalToDistanceTraveled = false
         // default is UISpringTimingParameters()
         configuration.timingCurveProvider = UISpringTimingParameters(dampingRatio: 0.8)
-        configuration.fullExpansionBehaviour = .coversFullScreen
+        configuration.fullExpansionBehaviour = .doesNotCoverStatusBar
         configuration.supportsPartialExpansion = true
         configuration.dismissesInStages = true
         configuration.isDrawerDraggable = true
@@ -36,25 +36,29 @@ private extension PresenterViewController {
         configuration.flickSpeedThreshold = 3
         configuration.upperMarkGap = 100 // default is 40
         configuration.lowerMarkGap =  80 // default is 40
+        
         configuration.maximumCornerRadius = 15
+        configuration.cornerAnimationOption = .always
+        
+        configuration.shouldForwardTouchesToPresenterVC = true
 
         var handleViewConfiguration = HandleViewConfiguration()
-        handleViewConfiguration.autoAnimatesDimming = true
+        handleViewConfiguration.autoAnimatesDimming = false
         handleViewConfiguration.backgroundColor = .gray
         handleViewConfiguration.size = CGSize(width: 40, height: 6)
         handleViewConfiguration.top = 8
         handleViewConfiguration.cornerRadius = .automatic
         configuration.handleViewConfiguration = handleViewConfiguration
 
-        let borderColor = UIColor(red: 1, green: 0, blue: 0, alpha: 1)
-        let drawerBorderConfiguration = DrawerBorderConfiguration(borderThickness: 0.5,
-                                                                  borderColor: borderColor)
-        configuration.drawerBorderConfiguration = drawerBorderConfiguration // default is nil
+//        let borderColor = UIColor(red: 1, green: 0, blue: 0, alpha: 1)
+//        let drawerBorderConfiguration = DrawerBorderConfiguration(borderThickness: 0.5,
+//                                                                  borderColor: borderColor)
+//        configuration.drawerBorderConfiguration = drawerBorderConfiguration // default is nil
 
-        let drawerShadowConfiguration = DrawerShadowConfiguration(shadowOpacity: 0.75,
-                                                                  shadowRadius: 10,
-                                                                  shadowOffset: .zero,
-                                                                  shadowColor: .red)
+        let drawerShadowConfiguration = DrawerShadowConfiguration(shadowOpacity: 1,
+                                                                  shadowRadius: 32,
+                                                                  shadowOffset: CGSize(width: 0, height: 8),
+                                                                  shadowColor: UIColor.blue)
         configuration.drawerShadowConfiguration = drawerShadowConfiguration // default is nil
 
         drawerDisplayController = DrawerDisplayController(presentingViewController: self,

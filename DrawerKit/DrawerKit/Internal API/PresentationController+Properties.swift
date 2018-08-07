@@ -98,7 +98,8 @@ extension PresentationController {
                                                   drawerFullY: drawerFullY)
 
             return maximumCornerRadius * min(positionY, DrawerGeometry.statusBarHeight) / DrawerGeometry.statusBarHeight
-
+        case .always:
+            return maximumCornerRadius
         }
     }
 

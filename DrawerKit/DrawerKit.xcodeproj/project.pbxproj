@@ -39,6 +39,7 @@
 		CBB9A9771FA8DC04008253CB /* HandleViewConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBB9A9761FA8DC04008253CB /* HandleViewConfiguration.swift */; };
 		CBBA2D5C1F8E815B00E0137F /* DrawerKit.h in Headers */ = {isa = PBXBuildFile; fileRef = CBBA2D5A1F8E815B00E0137F /* DrawerKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		CBFA36F21F9C4004006847BB /* GeometryEvaluator.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBFA36F11F9C4004006847BB /* GeometryEvaluator.swift */; };
+		E64E67232119CB5F00421F4C /* ForwardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E64E67222119CB5F00421F4C /* ForwardingView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -76,6 +77,7 @@
 		CBBA2D5A1F8E815B00E0137F /* DrawerKit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DrawerKit.h; sourceTree = "<group>"; };
 		CBBA2D5B1F8E815B00E0137F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		CBFA36F11F9C4004006847BB /* GeometryEvaluator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeometryEvaluator.swift; sourceTree = "<group>"; };
+		E64E67222119CB5F00421F4C /* ForwardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForwardingView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -118,6 +120,7 @@
 				CB2CB79C1F8E951900AA152D /* AnimationController.swift */,
 				CBFA36F11F9C4004006847BB /* GeometryEvaluator.swift */,
 				CBACF6B21F9C622300C15CA3 /* AnimationSupport.swift */,
+				E64E67222119CB5F00421F4C /* ForwardingView.swift */,
 			);
 			path = "Internal API";
 			sourceTree = "<group>";
@@ -294,6 +297,7 @@
 				CB2CB79D1F8E951900AA152D /* DrawerDisplayController.swift in Sources */,
 				CB6F86BC1F9C06D6000FA37A /* PresentationController+Animation.swift in Sources */,
 				CB9101C61F8F791A000EAC41 /* PresentationController+Configuration.swift in Sources */,
+				E64E67232119CB5F00421F4C /* ForwardingView.swift in Sources */,
 				CB2CB79E1F8E951900AA152D /* PresentationController.swift in Sources */,
 				654604CE207BD4BC00B72395 /* DrawerPresentationControlling.swift in Sources */,
 			);
