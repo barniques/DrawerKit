@@ -9,7 +9,7 @@ extension PresentationController {
         return configuration.durationIsProportionalToDistanceTraveled
     }
 
-    var timingCurveProvider: UITimingCurveProvider {
+    var timingCurveProvider: AnyObject? {
         return configuration.timingCurveProvider
     }
 

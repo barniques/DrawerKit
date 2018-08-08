@@ -24,7 +24,7 @@ private extension PresenterViewController {
         configuration.totalDurationInSeconds = 0.4
         configuration.durationIsProportionalToDistanceTraveled = false
         // default is UISpringTimingParameters()
-        configuration.timingCurveProvider = UISpringTimingParameters(dampingRatio: 0.8)
+//        configuration.timingCurveProvider = UISpringTimingParameters(dampingRatio: 0.8)
         configuration.fullExpansionBehaviour = .doesNotCoverStatusBar
         configuration.supportsPartialExpansion = true
         configuration.dismissesInStages = true

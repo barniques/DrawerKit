@@ -37,7 +37,7 @@ struct AnimationSupport {
                          _ geometry: DrawerGeometry,
                          _ actualDurationInSeconds: TimeInterval,
                          _ isPresenting: Bool,
-                         _ endingPosition: UIViewAnimatingPosition? = nil) -> DrawerAnimationInfo {
+                         _ endingPosition: DrawerAnimatingPosition? = nil) -> DrawerAnimationInfo {
         let endDrawerState = (endingPosition == .start ? startDrawerState : targetDrawerState)
         return DrawerAnimationInfo(configuration: configuration,
                                    geometry: geometry,
@@ -66,7 +66,7 @@ struct AnimationSupport {
 
     static func clientCleanupViews(presentingDrawerAnimationActions: DrawerAnimationActions,
                                    presentedDrawerAnimationActions: DrawerAnimationActions,
-                                   _ endingPosition: UIViewAnimatingPosition,
+                                   _ endingPosition: DrawerAnimatingPosition,
                                    _ info: DrawerAnimationInfo) {
         var endInfo = info
         endInfo.endPosition = endingPosition

@@ -13,7 +13,9 @@ final class InteractionController: UIPercentDrivenInteractiveTransition {
         self.presentedVC = presentedVC
         super.init()
         setupDrawerDragRecogniser()
-        wantsInteractiveStart = false
+        if #available(iOS 10.0, *) {
+            wantsInteractiveStart = false
+        }
     }
 }
 

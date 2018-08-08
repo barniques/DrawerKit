@@ -73,7 +73,9 @@ public struct DrawerConfiguration {
     /// curve provider, is computed based on the specifics of the spring-based curve.
     /// The default is `UISpringTimingParameters()`, which is the system's global
     /// spring-based timing curve.
-    public var timingCurveProvider: UITimingCurveProvider
+//    public var timingCurveProvider: UITimingCurveProvider
+    //for making available ios 9
+    public var timingCurveProvider: AnyObject?
 
     /// Whether the drawer expands to cover the entire screen, the entire screen minus
     /// the status bar, or the entire screen minus a custom gap. The default is to cover
@@ -163,7 +165,7 @@ public struct DrawerConfiguration {
 
     public init(totalDurationInSeconds: TimeInterval = 0.4,
                 durationIsProportionalToDistanceTraveled: Bool = false,
-                timingCurveProvider: UITimingCurveProvider = UISpringTimingParameters(),
+                timingCurveProvider: AnyObject? = nil,
                 fullExpansionBehaviour: FullExpansionBehaviour = .coversFullScreen,
                 supportsPartialExpansion: Bool = true,
                 dismissesInStages: Bool = true,

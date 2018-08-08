@@ -4,6 +4,23 @@ import UIKit
 /// if they conform to `DrawerAnimationParticipant`, for them to prepare, animate along,
 /// and/or cleanup their views before, during, and/or after a drawer transition.
 
+//for supporting ios 9
+public enum DrawerAnimatingPosition {
+    case end, start, current
+    
+    @available(iOS 10.0, *)
+    static func position(from value: UIViewAnimatingPosition) -> DrawerAnimatingPosition {
+        switch value {
+        case .current:
+            return .current
+        case .end:
+            return .end
+        case .start:
+            return .start
+        }
+    }
+}
+
 public struct DrawerAnimationInfo {
     /// The configuration parameters the drawer presentation was initialised with.
     public let configuration: DrawerConfiguration
@@ -40,7 +57,7 @@ public struct DrawerAnimationInfo {
     /// state, then the value of this property is `.start`; if it ends somewhere else
     /// in between, then the value of this property is `.current`. This last case should
     /// actually never happen for reported transitions.
-    public internal(set) var endPosition: UIViewAnimatingPosition?
+    public internal(set) var endPosition: DrawerAnimatingPosition?
 
     internal init(configuration: DrawerConfiguration,
                   geometry: DrawerGeometry,
@@ -49,7 +66,7 @@ public struct DrawerAnimationInfo {
                   startDrawerState: DrawerState,
                   targetDrawerState: DrawerState,
                   endDrawerState: DrawerState,
-                  endPosition: UIViewAnimatingPosition? = nil) {
+                  endPosition: DrawerAnimatingPosition? = nil) {
         self.configuration = configuration
         self.geometry = geometry
         self.actualDurationInSeconds = actualDurationInSeconds

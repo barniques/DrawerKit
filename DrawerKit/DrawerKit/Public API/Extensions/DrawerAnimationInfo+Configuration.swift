@@ -15,7 +15,7 @@ extension DrawerAnimationInfo {
         return configuration.durationIsProportionalToDistanceTraveled
     }
 
-    public var timingCurveProvider: UITimingCurveProvider {
+    public var timingCurveProvider: AnyObject? {
         return configuration.timingCurveProvider
     }
 

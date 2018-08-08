@@ -25,7 +25,7 @@ extension AnimationController: UIViewControllerAnimatedTransitioning {
         let (_, presentedVC) = viewControllers(context, isPresentation)
         return actualTransitionDuration(presentedVC, context)
     }
-
+    
     func animateTransition(using transitionContext: UIViewControllerContextTransitioning) {
         let (presentingVC, presentedVC) = viewControllers(transitionContext, isPresentation)
         if isPresentation {
@@ -33,8 +33,6 @@ extension AnimationController: UIViewControllerAnimatedTransitioning {
         }
 
         let duration = transitionDuration(using: transitionContext)
-        let timingCurveProvider = configuration.timingCurveProvider
-        let animator = UIViewPropertyAnimator(duration: duration, timingParameters: timingCurveProvider)
 
         let (initialFrame, finalFrame) = frames(presentedVC, transitionContext)
 
@@ -76,15 +74,15 @@ extension AnimationController: UIViewControllerAnimatedTransitioning {
                                             info)
         presentedVC.view.frame = initialFrame
 
-        animator.addAnimations {
+        let animation = {
             presentedVC.view.frame = finalFrame
             AnimationSupport.clientAnimateAlong(presentingDrawerAnimationActions: presentingAnimationActions,
                                                 presentedDrawerAnimationActions: presentedAnimationActions,
                                                 info)
         }
 
-        animator.addCompletion { endingPosition in
-            let finished = (endingPosition == UIViewAnimatingPosition.end)
+        let completion: (DrawerAnimatingPosition) -> Void = { endingPosition in
+            let finished = (endingPosition == DrawerAnimatingPosition.end)
             AnimationSupport.clientCleanupViews(presentingDrawerAnimationActions: presentingAnimationActions,
                                                 presentedDrawerAnimationActions: presentedAnimationActions,
                                                 endingPosition,
@@ -92,7 +90,15 @@ extension AnimationController: UIViewControllerAnimatedTransitioning {
             transitionContext.completeTransition(finished)
         }
 
-        animator.startAnimation()
+        if #available(iOS 10.0, *) {
+            self.animateWithPropertyAnimator(duration: duration,
+                                             animation: animation,
+                                             completion: completion)
+        } else {
+            self.animateWithUIView(duration: duration,
+                                             animation: animation,
+                                             completion: completion)
+        }
     }
 }
 
@@ -142,4 +148,40 @@ private extension AnimationController {
 
             return (presentingVC, presentedVC)
     }
+}
+
+private extension AnimationController {
+    
+    @available(iOS 10.0, *)
+    func animateWithPropertyAnimator(duration: TimeInterval,
+                                     animation: @escaping ()-> Void,
+                                     completion: ((DrawerAnimatingPosition)-> Void)? ) {
+        let timingCurveProvider = configuration.timingCurveProvider as? UITimingCurveProvider ?? UISpringTimingParameters()
+        let animator = UIViewPropertyAnimator(duration: duration, timingParameters: timingCurveProvider)
+        
+        animator.addAnimations(animation)
+        
+        if let completion = completion {
+            animator.addCompletion { (endingPosition) in
+                let drawerEndingPosition = DrawerAnimatingPosition.position(from: endingPosition)
+                completion(drawerEndingPosition)
+            }
+        }
+        
+        animator.startAnimation()
+    }
+    
+    func animateWithUIView(duration: TimeInterval,
+                           animation: @escaping ()-> Void,
+                           completion: ((DrawerAnimatingPosition)-> Void)? ) {
+        UIView.animate(withDuration: duration,
+                       delay: 0,
+                       options: [.allowUserInteraction, .beginFromCurrentState],
+                       animations: animation,
+                       completion: { (finished) in
+                        let state: DrawerAnimatingPosition = finished ? DrawerAnimatingPosition.end : DrawerAnimatingPosition.current
+                        completion?(state)
+        })
+    }
+
 }

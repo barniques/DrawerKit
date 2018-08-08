@@ -10,9 +10,11 @@ extension PresentationController {
         let (startingPositionY, endingPositionY) = positionsY(startingState: startingState,
                                                               endingState: endingState)
 
-        let animator = makeAnimator(startingPositionY: startingPositionY,
-                                    endingPositionY: endingPositionY)
-
+        let duration = AnimationSupport.actualTransitionDuration(from: startingPositionY,
+                                                                 to: endingPositionY,
+                                                                 containerViewHeight: containerViewHeight,
+                                                                 configuration: configuration)
+        
         let presentingVC = presentingViewController
         let presentedVC = presentedViewController
 
@@ -34,7 +36,7 @@ extension PresentationController {
                                              targetDrawerState: endingState,
                                              configuration,
                                              geometry,
-                                             animator.duration,
+                                             duration,
                                              endingPositionY < startingPositionY)
 
         let endingHandleViewAlpha = handleViewAlpha(at: endingState)
@@ -50,7 +52,7 @@ extension PresentationController {
 
         targetDrawerState = endingState
 
-        animator.addAnimations {
+        let animation = {
             self.currentDrawerY = endingPositionY
             if autoAnimatesDimming { self.handleView?.alpha = endingHandleViewAlpha }
             if maxCornerRadius != 0 { self.currentDrawerCornerRadius = endingCornerRadius }
@@ -60,7 +62,7 @@ extension PresentationController {
             animateAlongside?()
         }
 
-        animator.addCompletion { endingPosition in
+        let completion: (DrawerAnimatingPosition) -> Void = { endingPosition in
             if autoAnimatesDimming { self.handleView?.alpha = endingHandleViewAlpha }
 
             let isStartingStateCollapsed = (startingState == .collapsed)
@@ -104,7 +106,15 @@ extension PresentationController {
             completion?()
         }
 
-        animator.startAnimation()
+        if #available(iOS 10.0, *) {
+            self.animateWithPropertyAnimator(duration: duration,
+                                             animation: animation,
+                                             completion: completion)
+        } else {
+            self.animateWithUIView(duration: duration,
+                                   animation: animation,
+                                   completion: completion)
+        }
     }
 
     func addCornerRadiusAnimationEnding(at endingState: DrawerState) {
@@ -118,11 +128,14 @@ extension PresentationController {
         let (startingPositionY, endingPositionY) = positionsY(startingState: startingState,
                                                               endingState: endingState)
 
-        let animator = makeAnimator(startingPositionY: startingPositionY,
-                                    endingPositionY: endingPositionY)
-
+        let duration = AnimationSupport.actualTransitionDuration(from: startingPositionY,
+                                                                 to: endingPositionY,
+                                                                 containerViewHeight: containerViewHeight,
+                                                                 configuration: configuration)
+        
         let endingCornerRadius = cornerRadius(at: endingState)
-        animator.addAnimations {
+        
+        let animation = {
             self.currentDrawerCornerRadius = endingCornerRadius
         }
 
@@ -132,8 +145,10 @@ extension PresentationController {
         let isEndingStateCollapsedOrFullyExpanded =
             (endingState == .collapsed || endingState == .fullyExpanded)
 
+        var completion: ((DrawerAnimatingPosition) -> Void)? = nil
+        
         if isStartingStateCollapsedOrFullyExpanded || isEndingStateCollapsedOrFullyExpanded {
-            animator.addCompletion { endingPosition in
+            completion = { endingPosition in
                 let shouldSetCornerRadiusToZero =
                     (isEndingStateCollapsedOrFullyExpanded && endingPosition == .end) ||
                     (isStartingStateCollapsedOrFullyExpanded && endingPosition == .start)
@@ -143,19 +158,15 @@ extension PresentationController {
             }
         }
 
-        animator.startAnimation()
-    }
-
-    private func makeAnimator(startingPositionY: CGFloat,
-                              endingPositionY: CGFloat) -> UIViewPropertyAnimator {
-        let duration =
-            AnimationSupport.actualTransitionDuration(from: startingPositionY,
-                                                      to: endingPositionY,
-                                                      containerViewHeight: containerViewHeight,
-                                                      configuration: configuration)
-
-        return UIViewPropertyAnimator(duration: duration,
-                                      timingParameters: timingCurveProvider)
+        if #available(iOS 10.0, *) {
+            self.animateWithPropertyAnimator(duration: duration,
+                                             animation: animation,
+                                             completion: completion)
+        } else {
+            self.animateWithUIView(duration: duration,
+                                   animation: animation,
+                                   completion: completion)
+        }
     }
 
     private func positionsY(startingState: DrawerState,
@@ -175,4 +186,40 @@ extension PresentationController {
 
         return (startingPositionY, endingPositionY)
     }
+}
+
+private extension PresentationController {
+    
+    @available(iOS 10.0, *)
+    func animateWithPropertyAnimator(duration: TimeInterval,
+                                     animation: @escaping ()-> Void,
+                                     completion: ((DrawerAnimatingPosition)-> Void)? ) {
+        let timingCurveProvider = configuration.timingCurveProvider as? UITimingCurveProvider ?? UISpringTimingParameters()
+        let animator = UIViewPropertyAnimator(duration: duration, timingParameters: timingCurveProvider)
+        
+        animator.addAnimations(animation)
+        
+        if let completion = completion {
+            animator.addCompletion { (endingPosition) in
+                let drawerEndingPosition = DrawerAnimatingPosition.position(from: endingPosition)
+                completion(drawerEndingPosition)
+            }
+        }
+        
+        animator.startAnimation()
+    }
+    
+    func animateWithUIView(duration: TimeInterval,
+                           animation: @escaping ()-> Void,
+                           completion: ((DrawerAnimatingPosition)-> Void)? ) {
+        UIView.animate(withDuration: duration,
+                       delay: 0,
+                       options: [.allowUserInteraction, .beginFromCurrentState],
+                       animations: animation,
+                       completion: { (finished) in
+                        let state: DrawerAnimatingPosition = finished ? DrawerAnimatingPosition.end : DrawerAnimatingPosition.current
+                        completion?(state)
+        })
+    }
+    
 }
