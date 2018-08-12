@@ -14,7 +14,7 @@ public protocol DrawerPresentationControlling: class {
     /// - note: The drawer presentation controller does not retain the view.
     var scrollViewForPullToDismiss: UIScrollView? { get set }
 
-    func updateCurrentState()
+    func partlyExpand()
     func expandDrawer()
 }
 
