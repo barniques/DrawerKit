@@ -150,7 +150,7 @@ extension GeometryEvaluator {
                 return .fullyExpanded
             } else { // isMovingDown
                 let inStages = supportsPartialExpansion && dismissesInStages
-                return inStages ? .partiallyExpanded : .collapsed
+                return (inStages || !shouldDismissByUser) ? .partiallyExpanded : .collapsed
             }
         }
 
