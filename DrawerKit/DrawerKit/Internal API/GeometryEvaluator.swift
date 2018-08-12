@@ -138,6 +138,7 @@ extension GeometryEvaluator {
 
         let supportsPartialExpansion = configuration.supportsPartialExpansion
         let dismissesInStages = configuration.dismissesInStages
+        let shouldDismissByUser = configuration.shouldDismissByUser
 
         // === RETURN LOGIC STARTS HERE === //
 
@@ -154,11 +155,15 @@ extension GeometryEvaluator {
         }
 
         if isAboveLowerMark {
-            if isMovingDown {
+            if isMovingDown && shouldDismissByUser {
                 return .collapsed
             } else { // isMovingUp || isNotMoving
                 return (supportsPartialExpansion ? .partiallyExpanded : .fullyExpanded)
             }
+        }
+
+        if !shouldDismissByUser {
+            return (supportsPartialExpansion ? .partiallyExpanded : .fullyExpanded)
         }
 
         return .collapsed

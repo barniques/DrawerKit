@@ -162,6 +162,7 @@ public struct DrawerConfiguration {
     public var drawerShadowConfiguration: DrawerShadowConfiguration?
     
     public var shouldForwardTouchesToPresenterVC: Bool
+    public var shouldDismissByUser: Bool
 
     public init(totalDurationInSeconds: TimeInterval = 0.4,
                 durationIsProportionalToDistanceTraveled: Bool = false,
@@ -182,7 +183,8 @@ public struct DrawerConfiguration {
                 handleViewConfiguration: HandleViewConfiguration? = HandleViewConfiguration(),
                 drawerBorderConfiguration: DrawerBorderConfiguration? = nil,
                 drawerShadowConfiguration: DrawerShadowConfiguration? = nil,
-                shouldForwardTouchesToPresenterVC: Bool = false) {
+                shouldForwardTouchesToPresenterVC: Bool = false,
+                shouldDismissByUser: Bool = true) {
         self.totalDurationInSeconds = (totalDurationInSeconds > 0 ? totalDurationInSeconds : 0.4)
         self.durationIsProportionalToDistanceTraveled = durationIsProportionalToDistanceTraveled
         self.timingCurveProvider = timingCurveProvider
@@ -210,6 +212,7 @@ public struct DrawerConfiguration {
         self.drawerBorderConfiguration = drawerBorderConfiguration
         self.drawerShadowConfiguration = drawerShadowConfiguration
         self.shouldForwardTouchesToPresenterVC = shouldForwardTouchesToPresenterVC
+        self.shouldDismissByUser = shouldDismissByUser
     }
 }
 
@@ -234,5 +237,6 @@ extension DrawerConfiguration: Equatable {
             && lhs.drawerBorderConfiguration == rhs.drawerBorderConfiguration
             && lhs.drawerShadowConfiguration == rhs.drawerShadowConfiguration
             && lhs.shouldForwardTouchesToPresenterVC == rhs.shouldForwardTouchesToPresenterVC
+            &&  lhs.shouldDismissByUser == rhs.shouldDismissByUser
     }
 }
