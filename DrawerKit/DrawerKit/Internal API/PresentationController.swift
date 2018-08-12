@@ -135,4 +135,14 @@ extension PresentationController {
     }
 }
 
-extension PresentationController: DrawerPresentationControlling {}
+extension PresentationController: DrawerPresentationControlling {
+    
+    func updateCurrentState() {
+        animateTransition(to: currentDrawerState)
+    }
+    
+    func expandDrawer() {
+        animateTransition(to: .fullyExpanded)
+    }
+
+}
