@@ -143,7 +143,9 @@ extension GeometryEvaluator {
         // === RETURN LOGIC STARTS HERE === //
 
         if isMovingUpQuickly { return .fullyExpanded }
-        if isMovingDownQuickly { return .collapsed }
+        if isMovingDownQuickly {
+            return (supportsPartialExpansion && !shouldDismissByUser) ? .partiallyExpanded : .collapsed
+        }
 
         if isAboveUpperMark {
             if isMovingUp || isNotMoving {
