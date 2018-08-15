@@ -144,5 +144,9 @@ extension PresentationController: DrawerPresentationControlling {
     func expandDrawer() {
         animateTransition(to: .fullyExpanded)
     }
+    
+    func hideDrawer() {
+        animateTransition(to: .collapsed)
+    }
 
 }

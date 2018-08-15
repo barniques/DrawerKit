@@ -16,6 +16,7 @@ public protocol DrawerPresentationControlling: class {
 
     func partlyExpand()
     func expandDrawer()
+    func hideDrawer()
 }
 
 extension UIViewController {
