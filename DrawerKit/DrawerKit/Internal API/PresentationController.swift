@@ -80,9 +80,10 @@ final class PresentationController: UIPresentationController {
 extension PresentationController {
     override var frameOfPresentedViewInContainerView: CGRect {
         var frame: CGRect = .zero
-        frame.size = size(forChildContentContainer: presentedViewController,
-                          withParentContainerSize: containerViewSize)
         let drawerFullY = configuration.fullExpansionBehaviour.drawerFullY
+        let height = containerViewHeight - drawerFullY
+        frame.size = size(forChildContentContainer: presentedViewController,
+                          withParentContainerSize: CGSize(width: containerViewSize.width, height: height))
         frame.origin.y = GeometryEvaluator.drawerPositionY(for: targetDrawerState,
                                                            drawerPartialHeight: drawerPartialHeight,
                                                            containerViewHeight: containerViewHeight,
