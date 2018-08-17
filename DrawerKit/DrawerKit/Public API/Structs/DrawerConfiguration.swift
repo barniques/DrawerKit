@@ -161,6 +161,8 @@ public struct DrawerConfiguration {
     /// property to `nil` so as not to have a drawer shadow. The default value is `nil`.
     public var drawerShadowConfiguration: DrawerShadowConfiguration?
     
+    public var drawerDimmingConfiguration: DrawerDimmingConfiguration?
+
     public var shouldForwardTouchesToPresenterVC: Bool
     public var shouldDismissByUser: Bool
 

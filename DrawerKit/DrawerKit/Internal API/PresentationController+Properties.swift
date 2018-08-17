@@ -106,7 +106,7 @@ extension PresentationController {
     func handleViewAlpha(at state: DrawerState) -> CGFloat {
         return triangularValue(at: state)
     }
-
+    
     private func triangularValue(at state: DrawerState) -> CGFloat {
         let drawerFullY = configuration.fullExpansionBehaviour.drawerFullY
         guard drawerPartialY != drawerFullY
@@ -133,4 +133,32 @@ extension PresentationController {
 
         return fraction
     }
+    
+    func dimmingViewAlpha(at state: DrawerState) -> CGFloat {
+        let drawerFullY = configuration.fullExpansionBehaviour.drawerFullY
+        guard drawerPartialY != drawerFullY
+            && drawerPartialY != containerViewHeight
+            && drawerFullY != containerViewHeight
+            else { return 0 }
+        
+        let positionY =
+            GeometryEvaluator.drawerPositionY(for: state,
+                                              drawerPartialHeight: drawerPartialHeight,
+                                              containerViewHeight: containerViewHeight,
+                                              drawerFullY: drawerFullY)
+        
+        let fraction: CGFloat
+        if supportsPartialExpansion {
+            if positionY < drawerPartialY {
+                fraction = 1 - (positionY - drawerFullY) / (drawerPartialY - drawerFullY)
+            } else {
+                fraction = 0
+            }
+        } else {
+            fraction = 1 - (positionY - drawerFullY) / (containerViewHeight - drawerFullY)
+        }
+        
+        return fraction
+    }
+
 }

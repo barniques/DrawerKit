@@ -5,7 +5,13 @@ final class PresentationController: UIPresentationController {
     let inDebugMode: Bool
     let forwardingView: ForwardingView?
     let handleView: UIView?
-
+    let dimmingView: UIView?
+    
+    //system can't run two dismissal transitions,
+    //therefor we should animate "dismiss" before call dismiss function
+    //only for simultaneously dismiss presentation vc and presenting vc
+    var currentAnimator: Any?
+    
     let presentingDrawerAnimationActions: DrawerAnimationActions
     let presentedDrawerAnimationActions: DrawerAnimationActions
 
@@ -54,6 +60,7 @@ final class PresentationController: UIPresentationController {
         self.configuration = configuration
         self.inDebugMode = inDebugMode
         self.handleView = (configuration.handleViewConfiguration != nil ? UIView() : nil)
+        self.dimmingView = (configuration.drawerDimmingConfiguration != nil ? UIView() : nil)
         self.forwardingView = (configuration.shouldForwardTouchesToPresenterVC ? ForwardingView() : nil)
         self.presentingDrawerAnimationActions = presentingDrawerAnimationActions
         self.presentedDrawerAnimationActions = presentedDrawerAnimationActions
@@ -103,6 +110,7 @@ extension PresentationController {
         setupDrawerDragRecogniser()
         setupDebugHeightMarks()
         setupHandleView()
+        setupDimmmingView()
         setupForwardingView()
         setupDrawerBorder()
         setupDrawerShadow()
@@ -148,6 +156,10 @@ extension PresentationController: DrawerPresentationControlling {
     
     func hideDrawer() {
         animateTransition(to: .collapsed)
+    }
+    
+    func prepareForDismissal() {
+        animateTransition(to: .collapsed, forceUIViewAnimation: true)
     }
 
 }

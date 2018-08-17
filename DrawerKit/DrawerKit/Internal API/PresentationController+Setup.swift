@@ -90,6 +90,26 @@ extension PresentationController {
             presentedView?.layer.shadowOffset = drawerShadowConfig.shadowOffset
         }
     }
+    
+    func setupDimmmingView() {
+        if let drawerDimmingConfig = configuration.drawerDimmingConfiguration {
+            guard let dimmingView = self.dimmingView, let containerView = containerView else { return }
+            dimmingView.translatesAutoresizingMaskIntoConstraints = false
+            dimmingView.isUserInteractionEnabled = false
+            dimmingView.backgroundColor = drawerDimmingConfig.backgroundColor
+            dimmingView.alpha = 0.0
+            containerView.addSubview(dimmingView)
+            NSLayoutConstraint.activate([
+                containerView.topAnchor.constraint(equalTo: dimmingView.topAnchor),
+                containerView.bottomAnchor.constraint(equalTo: dimmingView.bottomAnchor),
+                containerView.leftAnchor.constraint(equalTo: dimmingView.leftAnchor),
+                containerView.rightAnchor.constraint(equalTo: dimmingView.rightAnchor)])
+        }
+    }
+    
+    func removeDimmingView() {
+        self.dimmingView?.removeFromSuperview()
+    }
 }
 
 extension PresentationController {

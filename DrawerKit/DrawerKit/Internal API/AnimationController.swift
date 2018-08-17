@@ -65,7 +65,27 @@ extension AnimationController: UIViewControllerAnimatedTransitioning {
                                              geometry,
                                              duration,
                                              isPresentation)
+        
+        let presentationVC = presentedVC.presentationController as? PresentationController
+        var animatesHandleDimming = false
+        var endingHandleViewAlpha: CGFloat = 0.0
+        var animatesDimmingView = false
+        var endingDimmingViewAlpha: CGFloat = 0.0
 
+        if let presentation = presentationVC {
+            animatesHandleDimming = presentation.configuration.handleViewConfiguration != nil
+            if animatesHandleDimming {
+                endingHandleViewAlpha = presentation.handleViewAlpha(at: targetDrawerState)
+                presentation.handleView?.alpha = presentation.handleViewAlpha(at: startDrawerState)
+            }
+
+            animatesDimmingView = presentation.configuration.drawerDimmingConfiguration != nil
+            if animatesDimmingView {
+                endingDimmingViewAlpha = presentation.dimmingViewAlpha(at: targetDrawerState)
+                presentation.dimmingView?.alpha = presentation.dimmingViewAlpha(at: startDrawerState)
+            }
+        }
+        
         let presentingAnimationActions = self.presentingDrawerAnimationActions
         let presentedAnimationActions = self.presentedDrawerAnimationActions
 
@@ -76,12 +96,16 @@ extension AnimationController: UIViewControllerAnimatedTransitioning {
 
         let animation = {
             presentedVC.view.frame = finalFrame
+            if animatesDimmingView { presentationVC?.dimmingView?.alpha = endingDimmingViewAlpha }
+            if animatesHandleDimming { presentationVC?.handleView?.alpha = endingHandleViewAlpha }
             AnimationSupport.clientAnimateAlong(presentingDrawerAnimationActions: presentingAnimationActions,
                                                 presentedDrawerAnimationActions: presentedAnimationActions,
                                                 info)
         }
 
         let completion: (DrawerAnimatingPosition) -> Void = { endingPosition in
+            if animatesHandleDimming { presentationVC?.handleView?.alpha = endingHandleViewAlpha }
+            if animatesDimmingView { presentationVC?.dimmingView?.alpha = endingDimmingViewAlpha }
             let finished = (endingPosition == DrawerAnimatingPosition.end)
             AnimationSupport.clientCleanupViews(presentingDrawerAnimationActions: presentingAnimationActions,
                                                 presentedDrawerAnimationActions: presentedAnimationActions,
@@ -89,16 +113,10 @@ extension AnimationController: UIViewControllerAnimatedTransitioning {
                                                 info)
             transitionContext.completeTransition(finished)
         }
-
-        if #available(iOS 10.0, *) {
-            self.animateWithPropertyAnimator(duration: duration,
-                                             animation: animation,
-                                             completion: completion)
-        } else {
-            self.animateWithUIView(duration: duration,
-                                             animation: animation,
-                                             completion: completion)
-        }
+        
+        self.animateWithUIView(duration: duration,
+                               animation: animation,
+                               completion: completion)
     }
 }
 
@@ -151,25 +169,6 @@ private extension AnimationController {
 }
 
 private extension AnimationController {
-    
-    @available(iOS 10.0, *)
-    func animateWithPropertyAnimator(duration: TimeInterval,
-                                     animation: @escaping ()-> Void,
-                                     completion: ((DrawerAnimatingPosition)-> Void)? ) {
-        let timingCurveProvider = configuration.timingCurveProvider as? UITimingCurveProvider ?? UISpringTimingParameters()
-        let animator = UIViewPropertyAnimator(duration: duration, timingParameters: timingCurveProvider)
-        
-        animator.addAnimations(animation)
-        
-        if let completion = completion {
-            animator.addCompletion { (endingPosition) in
-                let drawerEndingPosition = DrawerAnimatingPosition.position(from: endingPosition)
-                completion(drawerEndingPosition)
-            }
-        }
-        
-        animator.startAnimation()
-    }
     
     func animateWithUIView(duration: TimeInterval,
                            animation: @escaping ()-> Void,

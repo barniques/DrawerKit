@@ -18,6 +18,7 @@
 		CBBA2D711F8E83E300E0137F /* PresentedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBBA2D6D1F8E83E300E0137F /* PresentedView.swift */; };
 		CBBA2D721F8E83E300E0137F /* PresentedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBBA2D6E1F8E83E300E0137F /* PresentedViewController.swift */; };
 		D8AC28F81F965EFC0085F252 /* DrawerKitDemoUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8AC28F71F965EFC0085F252 /* DrawerKitDemoUITests.swift */; };
+		E6991DFC2125A02C00EC9BED /* TestViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6991DFB2125A02C00EC9BED /* TestViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -59,6 +60,7 @@
 		D8AC28F51F965EFC0085F252 /* DrawerKitDemoUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = DrawerKitDemoUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		D8AC28F71F965EFC0085F252 /* DrawerKitDemoUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DrawerKitDemoUITests.swift; sourceTree = "<group>"; };
 		D8AC28F91F965EFC0085F252 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		E6991DFB2125A02C00EC9BED /* TestViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -107,6 +109,7 @@
 				CBBA2D6E1F8E83E300E0137F /* PresentedViewController.swift */,
 				9AB81C472076E73800C7A595 /* PresentedNavigationController.swift */,
 				CBBA2D6D1F8E83E300E0137F /* PresentedView.swift */,
+				E6991DFB2125A02C00EC9BED /* TestViewController.swift */,
 				CBBA2D421F8E807400E0137F /* Assets.xcassets */,
 				CBBA2D6A1F8E839200E0137F /* Storyboards */,
 				CBBA2D471F8E807400E0137F /* Info.plist */,
@@ -240,6 +243,7 @@
 				CBBA2D721F8E83E300E0137F /* PresentedViewController.swift in Sources */,
 				9AB81C482076E73800C7A595 /* PresentedNavigationController.swift in Sources */,
 				CBBA2D711F8E83E300E0137F /* PresentedView.swift in Sources */,
+				E6991DFC2125A02C00EC9BED /* TestViewController.swift in Sources */,
 				CBBA2D6F1F8E83E300E0137F /* PresenterViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
