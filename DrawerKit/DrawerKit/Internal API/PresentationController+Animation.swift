@@ -111,7 +111,7 @@ extension PresentationController {
 
             if endingPosition != .end {
                 self.targetDrawerState = GeometryEvaluator.drawerState(for: self.currentDrawerY,
-                                                                       drawerPartialHeight: self.drawerPartialY,
+                                                                       drawerPartialHeight: self.drawerPartialHeight,
                                                                        containerViewHeight: self.containerViewHeight,
                                                                        configuration: self.configuration)
                 print("after completion", self.targetDrawerState)
@@ -240,7 +240,7 @@ private extension PresentationController {
                        animations: animation,
                        completion: { (finished) in
                         let currentState = GeometryEvaluator.drawerState(for: self.currentDrawerY,
-                                                                         drawerPartialHeight: self.drawerPartialY,
+                                                                         drawerPartialHeight: self.drawerPartialHeight,
                                                                          containerViewHeight: self.containerViewHeight,
                                                                          configuration: self.configuration)
                         print("before completion", currentState, self.targetDrawerState)
