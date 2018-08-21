@@ -74,13 +74,16 @@ extension PresentationController {
             let radius = presentedView?.layer.cornerRadius ?? 0
             return min(max(radius, 0), maximumCornerRadius)
         }
-
         set {
             let radius = min(max(newValue, 0), maximumCornerRadius)
-            presentedView?.layer.cornerRadius = radius
-            presentedView?.layer.masksToBounds = true
-            if #available(iOS 11.0, *) {
-                presentedView?.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
+            if let shadowLayer = self.shadowLayer {
+                shadowLayer.path = UIBezierPath(roundedRect: presentedView?.bounds ?? CGRect.zero, cornerRadius: radius).cgPath
+            } else {
+                presentedView?.layer.cornerRadius = radius
+                presentedView?.layer.masksToBounds = true
+                if #available(iOS 11.0, *) {
+                    presentedView?.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
+                }
             }
         }
     }

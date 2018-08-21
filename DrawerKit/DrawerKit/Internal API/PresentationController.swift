@@ -7,6 +7,8 @@ final class PresentationController: UIPresentationController {
     let handleView: UIView?
     let dimmingView: UIView?
     
+    var shadowLayer: CAShapeLayer?
+    
     //system can't run two dismissal transitions,
     //therefor we should animate "dismiss" before call dismiss function
     //only for simultaneously dismiss presentation vc and presenting vc
