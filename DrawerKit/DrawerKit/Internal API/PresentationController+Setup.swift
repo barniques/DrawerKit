@@ -83,9 +83,11 @@ extension PresentationController {
     }
 
     func setupDrawerShadow() {
-        if let drawerShadowConfig = configuration.drawerShadowConfiguration, let view = presentedView {
+        if let drawerShadowConfig = configuration.drawerShadowConfiguration,
+            let view = presentedView,
+            let shadowLayer = self.shadowLayer,
+            let conrerLayer = self.cornerLayer {
             
-            let shadowLayer = CAShapeLayer()
             shadowLayer.anchorPoint = CGPoint.zero
             shadowLayer.bounds = view.bounds
             shadowLayer.path = UIBezierPath(rect: view.bounds).cgPath
@@ -97,7 +99,6 @@ extension PresentationController {
             shadowLayer.shadowOpacity = Float(drawerShadowConfig.shadowOpacity)
             shadowLayer.shadowRadius = drawerShadowConfig.shadowRadius
             shadowLayer.shadowPath = shadowLayer.path
-            self.shadowLayer = shadowLayer
             view.layer.insertSublayer(shadowLayer, at: 0)
         }
     }

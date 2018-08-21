@@ -21,8 +21,11 @@ struct AnimationSupport {
         let navigationBarHeight =
             presentingVC.navigationController?.navigationBar.bounds.size.height ?? 0
 
-        let heightOfPartiallyExpandedDrawer =
+        var heightOfPartiallyExpandedDrawer =
             (presentedVC as? DrawerPresentable)?.heightOfPartiallyExpandedDrawer ?? 0
+        if #available(iOS 11.0, *) {
+            heightOfPartiallyExpandedDrawer = heightOfPartiallyExpandedDrawer + presentingVC.view.safeAreaInsets.bottom
+        }
 
         return DrawerGeometry(containerBounds: containerBounds,
                               startingFrame: startingFrame,

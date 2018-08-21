@@ -7,7 +7,8 @@ final class PresentationController: UIPresentationController {
     let handleView: UIView?
     let dimmingView: UIView?
     
-    var shadowLayer: CAShapeLayer?
+    let shadowLayer: CAShapeLayer?
+    let cornerLayer: CAShapeLayer?
     
     //system can't run two dismissal transitions,
     //therefor we should animate "dismiss" before call dismiss function
@@ -64,6 +65,8 @@ final class PresentationController: UIPresentationController {
         self.handleView = (configuration.handleViewConfiguration != nil ? UIView() : nil)
         self.dimmingView = (configuration.drawerDimmingConfiguration != nil ? UIView() : nil)
         self.forwardingView = (configuration.shouldForwardTouchesToPresenterVC ? ForwardingView() : nil)
+        self.shadowLayer = (configuration.drawerShadowConfiguration != nil ? CAShapeLayer() : nil)
+        self.cornerLayer = (configuration.drawerShadowConfiguration != nil ? CAShapeLayer() : nil)
         self.presentingDrawerAnimationActions = presentingDrawerAnimationActions
         self.presentedDrawerAnimationActions = presentedDrawerAnimationActions
         self.targetDrawerState = configuration.supportsPartialExpansion ? .partiallyExpanded : .fullyExpanded

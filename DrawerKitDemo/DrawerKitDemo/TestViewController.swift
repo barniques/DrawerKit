@@ -17,10 +17,10 @@ class TestViewController: UIViewController {
 
 extension TestViewController: DrawerPresentable {
     var heightOfPartiallyExpandedDrawer: CGFloat {
-        if #available(iOS 11, *) {
-            return testLabel.frame.maxY + view.safeAreaInsets.bottom
-        } else {
+//        if #available(iOS 11, *) {
+//            return testLabel.frame.maxY + view.safeAreaInsets.bottom
+//        } else {
             return testLabel.frame.maxY
-        }
+//        }
     }
 }

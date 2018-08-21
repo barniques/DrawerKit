@@ -45,7 +45,10 @@ extension AnimationController: UIViewControllerAnimatedTransitioning {
                                                      presentingVC: presentingVC,
                                                      presentedVC: presentedVC)
 
-        let drawerPartialH = (presentedVC as? DrawerPresentable)?.heightOfPartiallyExpandedDrawer ?? 0
+        var drawerPartialH = (presentedVC as? DrawerPresentable)?.heightOfPartiallyExpandedDrawer ?? 0
+        if #available(iOS 11.0, *) {
+            drawerPartialH = drawerPartialH + presentedVC.view.safeAreaInsets.bottom
+        }
         let partialH = GeometryEvaluator.drawerPartialH(drawerPartialHeight: drawerPartialH,
                                                         containerViewHeight: containerViewH)
 
@@ -103,10 +106,17 @@ extension AnimationController: UIViewControllerAnimatedTransitioning {
                                                 info)
         }
 
-        let completion: (DrawerAnimatingPosition) -> Void = { endingPosition in
+        let completion: (Bool) -> Void = { finished in
             if animatesHandleDimming { presentationVC?.handleView?.alpha = endingHandleViewAlpha }
             if animatesDimmingView { presentationVC?.dimmingView?.alpha = endingDimmingViewAlpha }
-            let finished = (endingPosition == DrawerAnimatingPosition.end)
+
+            let currentState = GeometryEvaluator.drawerState(for: finalFrame.origin.y,
+                                                                  drawerPartialHeight: partialH,
+                                                                  containerViewHeight: containerViewH,
+                                                                  configuration: self.configuration)
+            
+            let endingPosition: DrawerAnimatingPosition = currentState == targetDrawerState ? .end: .start
+            
             AnimationSupport.clientCleanupViews(presentingDrawerAnimationActions: presentingAnimationActions,
                                                 presentedDrawerAnimationActions: presentedAnimationActions,
                                                 endingPosition,
@@ -172,14 +182,13 @@ private extension AnimationController {
     
     func animateWithUIView(duration: TimeInterval,
                            animation: @escaping ()-> Void,
-                           completion: ((DrawerAnimatingPosition)-> Void)? ) {
+                           completion: ((Bool)-> Void)? ) {
         UIView.animate(withDuration: duration,
                        delay: 0,
                        options: [.allowUserInteraction, .beginFromCurrentState],
                        animations: animation,
                        completion: { (finished) in
-                        let state: DrawerAnimatingPosition = finished ? DrawerAnimatingPosition.end : DrawerAnimatingPosition.current
-                        completion?(state)
+                        completion?(finished)
         })
     }
 
