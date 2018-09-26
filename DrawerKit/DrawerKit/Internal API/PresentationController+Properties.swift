@@ -17,7 +17,7 @@ extension PresentationController {
         guard let presentedVC = presentedViewController as? DrawerPresentable else { return 0 }
         var drawerPartialH = presentedVC.heightOfPartiallyExpandedDrawer
         if #available(iOS 11.0, *) {
-            drawerPartialH = drawerPartialH + containerView!.safeAreaInsets.bottom
+            drawerPartialH = drawerPartialH + (containerView?.safeAreaInsets.bottom ?? 0)
         }
         return GeometryEvaluator.drawerPartialH(drawerPartialHeight: drawerPartialH,
                                                 containerViewHeight: containerViewHeight)
